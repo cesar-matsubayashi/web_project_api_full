@@ -1,0 +1,126 @@
+.profile {
+  display: flex;
+  margin-top: 40px;
+  align-items: center;
+}
+
+.profile__photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile__avatar-edit {
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  display: none;
+  width: 120px;
+  height: 120px;
+}
+
+.profile__photo:hover + .profile__avatar-edit {
+  display: flex;
+}
+
+.profile__edit-photo {
+  width: 26px;
+  height: 26px;
+}
+.profile__name-container {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 10px 18px;
+  align-items: baseline;
+  margin: 0 30px;
+}
+
+.profile__name {
+  font-size: 42px;
+  line-height: 48px;
+  font-weight: 500;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.profile__edit-btn {
+  width: 24px;
+  height: 24px;
+}
+
+.profile__edit-btn:hover {
+  opacity: 60%;
+}
+
+.profile__about {
+  font-size: 18px;
+  line-height: 21.78px;
+  font-weight: 400;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.profile__add-btn {
+  min-width: 150px;
+  height: 50px;
+  border: 2px solid #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+}
+.profile__add-btn:hover {
+  opacity: 60%;
+}
+
+.profile__add-btn-sign {
+  width: 22px;
+  height: 22px;
+}
+
+@media screen and (max-width: 544px) {
+  .profile {
+    margin-top: 42px;
+    flex-direction: column;
+    padding: 0 19px;
+  }
+
+  .profile__name-container {
+    margin: 30px 0 0;
+    text-align: center;
+  }
+
+  .profile__name {
+    font-size: 22px;
+    line-height: 26.63px;
+    margin: 0;
+  }
+
+  .profile__edit-btn {
+    width: 18px;
+    height: 18px;
+  }
+
+  .profile__description {
+    font-size: 14px;
+    line-height: 16.94px;
+    grid-column: span 2;
+  }
+
+  .profile__add-btn {
+    width: 100%;
+    margin: 36px 0 0;
+  }
+
+  .profile__add-btn-sign {
+    width: 16px;
+    height: 16px;
+  }
+}

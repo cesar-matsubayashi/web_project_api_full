@@ -1,0 +1,104 @@
+.gallery {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 17px;
+  justify-content: center;
+}
+
+.gallery__card {
+  width: 282px;
+  height: 361px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.gallery__photo {
+  object-fit: cover;
+  width: 100%;
+  height: 282px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.gallery__trash {
+  width: 18px;
+  height: 19.3px;
+  position: absolute;
+  top: 18px;
+  right: 15px;
+}
+
+.gallery__trash:hover {
+  opacity: 60%;
+}
+
+.gallery__caption {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 15px 0 21px;
+  padding: 0;
+}
+
+.gallery__title {
+  margin: 0;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29.05px;
+  color: #000000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.gallery__like-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery__like-btn {
+  width: 21px;
+  height: 19px;
+}
+
+.gallery__like-btn:hover {
+  opacity: 60%;
+}
+
+.gallery__like-btn_active:hover {
+  opacity: 100%;
+}
+
+.gallery__like-count {
+  margin: 3px 0 0;
+  color: #000000;
+  font-size: 13px;
+}
+
+@media screen and (max-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery__card:nth-child(odd) {
+    justify-self: flex-end;
+  }
+}
+
+@media screen and (max-width: 544px) {
+  .gallery {
+    margin-top: 36px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .gallery__card:nth-child(odd) {
+    justify-self: center;
+  }
+}

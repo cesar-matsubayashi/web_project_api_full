@@ -1,0 +1,46 @@
+.popup__nav {
+  width: 430px;
+  height: 330px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.popup__signup-image {
+  width: 120px;
+  height: 120px;
+  margin-top: 60px;
+}
+
+.popup__signup-caption {
+  font-weight: 900;
+  font-size: 24px;
+  margin: 32px 36px 60px 36px;
+}
+
+@media screen and (max-width: 544px) {
+  .popup__nav {
+    width: 280px;
+    height: 308px;
+  }
+
+  .popup__signup-image {
+    width: 120px;
+    height: 120px;
+    margin-top: 50px;
+  }
+
+  .popup__signup-caption {
+    font-size: 20px;
+    margin: 25px 19px 41px 19px;
+  }
+
+  .popup__close {
+    width: 30px;
+    height: 30px;
+    background-size: 30px 30px;
+    top: -54px;
+    right: 125px;
+  }
+}
