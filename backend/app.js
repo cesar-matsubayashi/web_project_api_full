@@ -1,7 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const users = require("./routes/users");
 const cards = require("./routes/cards");
+const { login, createUser } = require("./controllers/user");
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -10,6 +12,9 @@ mongoose.connect("mongodb://localhost:27017/aroundb");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.post("/signin", login);
+app.post("/signup", createUser);
 
 app.use((req, res, next) => {
   req.user = {
