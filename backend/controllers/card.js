@@ -36,16 +36,33 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.id)
+  Card.findById(req.params.id)
     .orFail(() => {
       const error = new Error("Recurso requisitado não encontrado");
       error.statusCode = 404;
       error.name = "DocumentNotFound";
       throw error;
     })
-    .then((card) => res.send(card))
+    .then((card) => {
+      console.log(card.owner.toString());
+      if (card.owner.toString() !== req.user._id) {
+        const error = new Error("Permissão negada");
+        error.statusCode = 403;
+        error.name = "ForbiddenRequest";
+        throw error;
+      }
+
+      return Card.findByIdAndDelete(req.params.id);
+    })
+    .then((deleted) => {
+      res.send(deleted);
+    })
     .catch((err) => {
       if (err.name === "DocumentNotFound") {
+        return res.status(err.statusCode).send({ message: err.message });
+      }
+
+      if (err.name === "ForbiddenRequest") {
         return res.status(err.statusCode).send({ message: err.message });
       }
 
