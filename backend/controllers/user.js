@@ -40,6 +40,19 @@ module.exports.getUser = (req, res) => {
     });
 };
 
+module.exports.getCurrentUser = (req, res) => {
+  User.findById(req.user._id)
+    .orFail(() => {
+      const error = new Error("ID do usuário não encontrado");
+      error.statusCode = 404;
+      throw error;
+    })
+    .then((users) => res.send(users))
+    .catch((err) => {
+      res.status(err.statusCode).send({ message: err.message });
+    });
+};
+
 module.exports.updateProfile = (req, res) => {
   const { name, about } = req.body;
 
