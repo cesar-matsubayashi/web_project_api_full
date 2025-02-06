@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
       NODE_ENV === "production" ? JWT_SECRET : "dev-secret"
     );
   } catch (err) {
-    return res.status(403).send({ message: "Autorização necessária" });
+    return res.status(401).send({ message: "Autorização necessária" });
   }
 
   req.user = payload;
