@@ -14,7 +14,6 @@ import InfoTooltip from "./Main/components/popup/components/InfoTooltip/InfoTool
 import signupFail from "../images/signup-fail.svg";
 import signupSuccess from "../images/signup-success.svg";
 import Popup from "./Main/components/popup/Popup";
-import { getUserAuth } from "../utils/api";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -31,9 +30,8 @@ function App() {
       return;
     }
 
-    getUserAuth(jwt).then((response) => {
-      const email = { email: response.data.email };
-      setCurrentUser((prevData) => ({ ...prevData, ...email }));
+    api.getUserInfo(jwt).then((response) => {
+      setCurrentUser((prevData) => ({ ...prevData, ...response }));
       setIsLoggedIn(true);
       navigate("/");
     });
@@ -41,16 +39,10 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      await api.getUserInfo().then((response) => {
-        setCurrentUser((prevData) => ({ ...prevData, ...response }));
-      });
-    })();
-
-    (async () => {
       await api
         .getInitialCards()
         .then((response) => {
-          setCards(response);
+          setCards(response.reverse());
         })
         .catch((err) => {
           console.log(err);
@@ -136,7 +128,7 @@ function App() {
   }
 
   function checkCurrentUserLiked(card) {
-    return card.likes.some((like) => like._id === currentUser._id);
+    return card.likes.some((like) => like === currentUser._id);
   }
 
   async function handleCardLike(card) {

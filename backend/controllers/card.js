@@ -44,7 +44,6 @@ module.exports.deleteCard = (req, res) => {
       throw error;
     })
     .then((card) => {
-      console.log(card.owner.toString());
       if (card.owner.toString() !== req.user._id) {
         const error = new Error("Permissão negada");
         error.statusCode = 403;

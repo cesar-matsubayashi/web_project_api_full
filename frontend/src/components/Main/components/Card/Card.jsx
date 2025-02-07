@@ -12,7 +12,7 @@ export default function Card(props) {
   const imagePopup = { children: <ImagePopup card={card} /> };
   const { currentUser } = useContext(CurrentUserContext);
 
-  const isLiked = likes.some((like) => like._id === currentUser._id);
+  const isLiked = likes.some((like) => like === currentUser._id);
   const cardLikeButtonClassName = `gallery__like-btn ${
     isLiked ? "gallery__like-btn_active" : ""
   }`;
@@ -27,7 +27,7 @@ export default function Card(props) {
         className="gallery__photo"
       />
 
-      {currentUser._id == owner._id && (
+      {currentUser._id == owner && (
         <img
           src={deleteIcon}
           alt="Excluir"

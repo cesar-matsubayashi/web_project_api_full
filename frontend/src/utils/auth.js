@@ -1,4 +1,5 @@
-export const BASE_URL = "https://se-register-api.en.tripleten-services.com/v1";
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+
 const HEADERS = {
   Accept: "application/json",
   "Content-Type": "application/json",
@@ -6,7 +7,7 @@ const HEADERS = {
 };
 
 export const register = (email, password) => {
-  return fetch(`${BASE_URL}/signup`, {
+  return fetch(`${API_URL}/signup`, {
     method: "POST",
     headers: HEADERS,
     body: JSON.stringify({ email, password }),
@@ -16,7 +17,7 @@ export const register = (email, password) => {
 };
 
 export const authorize = (email, password) => {
-  return fetch(`${BASE_URL}/signin`, {
+  return fetch(`${API_URL}/signin`, {
     method: "POST",
     headers: HEADERS,
     body: JSON.stringify({ email, password }),

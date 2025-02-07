@@ -23,7 +23,8 @@ class API {
     });
   }
 
-  getUserInfo() {
+  getUserInfo(token) {
+    this._headers["Authorization"] = `Bearer ${token}`;
     return this._makeRequest("/users/me");
   }
 
@@ -45,7 +46,7 @@ class API {
 
   changeLikeCardStatus(cardId, status) {
     const method = status ? "PUT" : "DELETE";
-    return this._makeRequest(`/cards/likes/${cardId}`, method);
+    return this._makeRequest(`/cards/${cardId}/likes`, method);
   }
 
   updateProfileAvatar(avatarLink) {
@@ -53,26 +54,11 @@ class API {
   }
 }
 
-const BASE_URL = "https://se-register-api.en.tripleten-services.com/v1";
-
-export const getUserAuth = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "Content-Security-Policy": "default-src 'self' *.tripleten-services.com",
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((res) => {
-    return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
-  });
-};
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 const api = new API({
-  baseUrl: "https://around.nomoreparties.co/v1/web-ptbr-cohort-14",
+  baseUrl: API_URL,
   headers: {
-    authorization: "e255bcaf-9aa3-4e45-a23a-da684d7fa67f",
     "Content-Security-Policy": "default-src 'self' *.nomoreparties.co",
   },
 });
