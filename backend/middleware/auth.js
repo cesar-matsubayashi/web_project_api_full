@@ -15,13 +15,13 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(
       token,
-      NODE_ENV === "production" ? JWT_SECRET : "dev-secret"
+      NODE_ENV === "production" ? JWT_SECRET : "dev-secret",
     );
-  } catch (err) {
+  } catch (err){
     return res.status(401).send({ message: "Autorização necessária" });
   }
 
   req.user = payload;
 
-  next();
+  return next();
 };

@@ -16,19 +16,21 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
 
-  bcrypt.hash(password, 10).then((hash) =>
-    User.create({ name, about, avatar, email, password: hash })
-      .then((user) => res.send(user))
-      .catch((err) => {
-        if (err.name === "ValidationError") {
-          return next(new ValidationError(err.message));
-        }
+  bcrypt.hash(password, 10).then((hash) => User.create({
+    name, about, avatar, email, password: hash,
+  })
+    .then((user) => res.send(user))
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return next(new ValidationError(err.message));
+      }
 
-        next();
-      })
-  );
+      return next();
+    }));
 };
 
 module.exports.getUser = (req, res, next) => {
@@ -59,7 +61,7 @@ module.exports.updateProfile = (req, res, next) => {
       new: true,
       runValidators: true,
       upsert: true,
-    }
+    },
   )
     .orFail(() => {
       throw new NotFoundError("Recurso requisitado não encontrado");
@@ -70,7 +72,7 @@ module.exports.updateProfile = (req, res, next) => {
         return next(new ValidationError(err.message));
       }
 
-      next();
+      return next();
     });
 };
 
@@ -84,7 +86,7 @@ module.exports.updateAvatar = (req, res, next) => {
       new: true,
       runValidators: true,
       upsert: true,
-    }
+    },
   )
     .orFail(() => {
       throw new NotFoundError("Recurso requisitado não encontrado");
@@ -95,7 +97,7 @@ module.exports.updateAvatar = (req, res, next) => {
         return next(new ValidationError(err.message));
       }
 
-      next();
+      return next();
     });
 };
 
@@ -107,7 +109,7 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === "production" ? JWT_SECRET : "dev-secret",
-        { expiresIn: "7d" }
+        { expiresIn: "7d" },
       );
 
       res.send({ token });
@@ -117,6 +119,6 @@ module.exports.login = (req, res, next) => {
         return next(new ValidationError(err.message));
       }
 
-      next();
+      return next();
     });
 };

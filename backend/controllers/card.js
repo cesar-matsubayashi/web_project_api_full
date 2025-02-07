@@ -23,7 +23,7 @@ module.exports.createCard = (req, res, next) => {
         return next(new ValidationError(err.message));
       }
 
-      next();
+      return next();
     });
 };
 
@@ -49,7 +49,7 @@ module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.id,
     { $addToSet: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .orFail(() => {
       throw new NotFoundError("Recurso requisitado não encontrado");
@@ -62,7 +62,7 @@ module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.id,
     { $pull: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .orFail(() => {
       throw new NotFoundError("Recurso requisitado não encontrado");

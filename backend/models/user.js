@@ -21,9 +21,7 @@ const userSchema = new mongoose.Schema({
       "https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg",
     validate: {
       validator(v) {
-        const regex =
-          /(http(s)?):\/\/[(www\.)?\w._\-~:/?%#\[\]@!$&'()*+,;=]{2,}/;
-        return regex.test(v);
+        return validator.isURL(v);
       },
       message: "O link informado não é válido",
     },
@@ -49,7 +47,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(
   email,
-  password
+  password,
 ) {
   return this.findOne({ email })
     .select("+password")
