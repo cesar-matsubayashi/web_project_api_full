@@ -30,14 +30,14 @@ function App() {
       return;
     }
 
-    api.getUserInfo(jwt).then((response) => {
-      setCurrentUser((prevData) => ({ ...prevData, ...response }));
-      setIsLoggedIn(true);
-      navigate("/");
-    });
-  }, [navigate]);
+    (async () => {
+      await api.getUserInfo(jwt).then((response) => {
+        setCurrentUser((prevData) => ({ ...prevData, ...response }));
+        setIsLoggedIn(true);
+        navigate("/");
+      });
+    })();
 
-  useEffect(() => {
     (async () => {
       await api
         .getInitialCards()
@@ -48,7 +48,7 @@ function App() {
           console.log(err);
         });
     })();
-  }, []);
+  }, [navigate]);
 
   const handleUpdateUser = (data) => {
     (async () => {
