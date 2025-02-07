@@ -26,10 +26,17 @@ app.use(auth);
 app.use("/users", users);
 app.use("/cards", cards);
 
+app.get("*", (req, res) => {
+  res.status(404).send({ message: "A solicitação não foi encontrada" });
+});
+
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
 });
 
-app.get("*", (req, res) => {
-  res.status(404).send({ message: "A solicitação não foi encontrada" });
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({
+    message: statusCode === 500 ? "Ocorreu um erro no servidor" : message,
+  });
 });

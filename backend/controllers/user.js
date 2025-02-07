@@ -1,59 +1,55 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const NotFoundError = require("../errors/NotFoundError");
+const ValidationError = require("../errors/ValidationError");
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .orFail(() => {
-      const error = new Error("Recurso requisitado não encontrado");
-      error.statusCode = 404;
-      throw error;
+      throw new NotFoundError("Recurso requisitado não encontrado");
     })
     .then((users) => res.send(users))
-    .catch((err) => res.status(err.statusCode).send({ message: err.message }));
+    .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
 
   bcrypt.hash(password, 10).then((hash) =>
     User.create({ name, about, avatar, email, password: hash })
       .then((user) => res.send(user))
-      .catch(() => {
-        res.status(500).send({ message: "Erro interno no servidor" });
+      .catch((err) => {
+        if (err.name === "ValidationError") {
+          return next(new ValidationError(err.message));
+        }
+
+        next();
       })
   );
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .orFail(() => {
-      const error = new Error("ID do usuário não encontrado");
-      error.statusCode = 404;
-      throw error;
+      throw new NotFoundError("Recurso requisitado não encontrado");
     })
     .then((users) => res.send(users))
-    .catch((err) => {
-      res.status(err.statusCode).send({ message: err.message });
-    });
+    .catch(next);
 };
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(() => {
-      const error = new Error("ID do usuário não encontrado");
-      error.statusCode = 404;
-      throw error;
+      throw new NotFoundError("Recurso requisitado não encontrado");
     })
     .then((users) => res.send(users))
-    .catch((err) => {
-      res.status(err.statusCode).send({ message: err.message });
-    });
+    .catch(next);
 };
 
-module.exports.updateProfile = (req, res) => {
+module.exports.updateProfile = (req, res, next) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(
@@ -66,28 +62,19 @@ module.exports.updateProfile = (req, res) => {
     }
   )
     .orFail(() => {
-      const error = new Error("Recurso requisitado não encontrado");
-      error.statusCode = 404;
-      error.name = "DocumentNotFound";
-      throw error;
+      throw new NotFoundError("Recurso requisitado não encontrado");
     })
     .then((user) => res.send(user))
     .catch((err) => {
-      const ERROR_CODE = 400;
-
       if (err.name === "ValidationError") {
-        return res.status(ERROR_CODE).send({ message: "Dados inválidos" });
+        return next(new ValidationError(err.message));
       }
 
-      if (err.name === "DocumentNotFound") {
-        return res.status(err.statusCode).send({ message: err.message });
-      }
-
-      return res.status(500).send({ message: "Erro interno no servidor" });
+      next();
     });
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(
@@ -100,28 +87,19 @@ module.exports.updateAvatar = (req, res) => {
     }
   )
     .orFail(() => {
-      const error = new Error("Recurso requisitado não encontrado");
-      error.statusCode = 404;
-      error.name = "DocumentNotFound";
-      throw error;
+      throw new NotFoundError("Recurso requisitado não encontrado");
     })
     .then((user) => res.send(user))
     .catch((err) => {
-      const ERROR_CODE = 400;
-
       if (err.name === "ValidationError") {
-        return res.status(ERROR_CODE).send({ message: "Dados inválidos" });
+        return next(new ValidationError(err.message));
       }
 
-      if (err.name === "DocumentNotFound") {
-        return res.status(err.statusCode).send({ message: err.message });
-      }
-
-      return res.status(500).send({ message: "Erro interno no servidor" });
+      next();
     });
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -135,6 +113,10 @@ module.exports.login = (req, res) => {
       res.send({ token });
     })
     .catch((err) => {
-      res.status(401).send({ message: err.message });
+      if (err.name === "ValidationError") {
+        return next(new ValidationError(err.message));
+      }
+
+      next();
     });
 };

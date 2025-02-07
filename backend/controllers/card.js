@@ -1,54 +1,40 @@
+const ForbiddenError = require("../errors/ForbiddenError");
+const NotFoundError = require("../errors/NotFoundError");
+const ValidationError = require("../errors/ValidationError");
 const Card = require("../models/card");
 
-module.exports.getCards = (req, res) => {
+module.exports.getCards = (req, res, next) => {
   Card.find({})
     .orFail(() => {
-      const error = new Error("Recurso requisitado não encontrado");
-      error.statusCode = 404;
-      error.name = "DocumentNotFound";
-      throw error;
+      throw new NotFoundError("Recurso requisitado não encontrado");
     })
     .then((cards) => res.send(cards))
-    .catch((err) => {
-      if (err.name === "DocumentNotFound") {
-        return res.status(err.statusCode).send({ message: err.message });
-      }
-
-      return res.status(500).send({ message: "Erro interno no servidor" });
-    });
+    .catch(next);
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
     .then((card) => res.send(card))
     .catch((err) => {
-      const ERROR_CODE = 400;
-
       if (err.name === "ValidationError") {
-        return res.status(ERROR_CODE).send({ message: "Dados inválidos" });
+        return next(new ValidationError(err.message));
       }
 
-      return res.status(500).send({ message: "Erro interno no servidor" });
+      next();
     });
 };
 
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.id)
     .orFail(() => {
-      const error = new Error("Recurso requisitado não encontrado");
-      error.statusCode = 404;
-      error.name = "DocumentNotFound";
-      throw error;
+      throw new NotFoundError("Recurso requisitado não encontrado");
     })
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
-        const error = new Error("Permissão negada");
-        error.statusCode = 403;
-        error.name = "ForbiddenRequest";
-        throw error;
+        throw new ForbiddenError("Permissão negada para o recurso requisitado");
       }
 
       return Card.findByIdAndDelete(req.params.id);
@@ -56,59 +42,31 @@ module.exports.deleteCard = (req, res) => {
     .then((deleted) => {
       res.send(deleted);
     })
-    .catch((err) => {
-      if (err.name === "DocumentNotFound") {
-        return res.status(err.statusCode).send({ message: err.message });
-      }
-
-      if (err.name === "ForbiddenRequest") {
-        return res.status(err.statusCode).send({ message: err.message });
-      }
-
-      return res.status(500).send({ message: "Erro interno no servidor" });
-    });
+    .catch(next);
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.id,
     { $addToSet: { likes: req.user._id } },
     { new: true }
   )
     .orFail(() => {
-      const error = new Error("Recurso requisitado não encontrado");
-      error.statusCode = 404;
-      error.name = "DocumentNotFound";
-      throw error;
+      throw new NotFoundError("Recurso requisitado não encontrado");
     })
     .then((card) => res.send(card))
-    .catch((err) => {
-      if (err.name === "DocumentNotFound") {
-        return res.status(err.statusCode).send({ message: err.message });
-      }
-
-      return res.status(500).send({ message: "Erro interno no servidor" });
-    });
+    .catch(next);
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.id,
     { $pull: { likes: req.user._id } },
     { new: true }
   )
     .orFail(() => {
-      const error = new Error("Recurso requisitado não encontrado");
-      error.statusCode = 404;
-      error.name = "DocumentNotFound";
-      throw error;
+      throw new NotFoundError("Recurso requisitado não encontrado");
     })
     .then((card) => res.send(card))
-    .catch((err) => {
-      if (err.name === "DocumentNotFound") {
-        return res.status(err.statusCode).send({ message: err.message });
-      }
-
-      return res.status(500).send({ message: "Erro interno no servidor" });
-    });
+    .catch(next);
 };
