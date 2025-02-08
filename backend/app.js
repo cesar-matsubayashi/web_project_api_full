@@ -7,6 +7,7 @@ const users = require("./routes/users");
 const cards = require("./routes/cards");
 const { login, createUser } = require("./controllers/user");
 const auth = require("./middleware/auth");
+const { requestLogger, errorLogger } = require("./middleware/logger");
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -18,6 +19,8 @@ mongoose.connect("mongodb://localhost:27017/aroundb");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(requestLogger);
 
 app.post("/signin", celebrate({
   body: Joi.object().keys({
@@ -46,6 +49,7 @@ app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
 });
 
+app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
