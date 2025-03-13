@@ -1,4 +1,3 @@
-# Tripleten web_project_api_full
 # Web Project Around Express
 
 Este projeto é uma aplicação web completa composta por um backend desenvolvido em Node.js com Express e um frontend construído com React e Vite. Ele permite que os usuários cadastrem-se, façam login, adicionem, excluam e curtam imagens em uma galeria interativa. O backend utiliza MongoDB para armazenar usuários e cartões, enquanto o frontend gerencia a interface e a experiência do usuário.
