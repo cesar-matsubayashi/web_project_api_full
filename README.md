@@ -5,23 +5,27 @@ Este projeto é uma aplicação web completa composta por um backend desenvolvid
 ## Tecnologias Utilizadas
 
 ### Backend
+
 - **Node.js:** Ambiente de execução JavaScript no servidor.
 - **Express:** Framework para criação de servidores.
 - **MongoDB:** Banco de dados NoSQL.
 
 ### Frontend
+
 - **React:** Biblioteca JavaScript para construção de interfaces.
 - **React Router:** Gerenciamento de rotas no frontend.
 - **React Context API:** Gerenciamento de estado global.
 - **Vite:** Ferramenta para construção e otimização do frontend.
 
 ### Autenticação e Segurança
+
 - **JWT (JSON Web Tokens):** Gerenciamento de autenticação segura.
 - **ESLint:** Ferramenta para padronização e qualidade do código.
 
 ## Funcionalidades
 
 ### Backend
+
 - **Usuários:**
   - `GET /users`: Retorna uma lista de usuários.
   - `POST /users`: Adiciona um novo usuário.
@@ -36,6 +40,7 @@ Este projeto é uma aplicação web completa composta por um backend desenvolvid
   - `DELETE /cards/:id/likes`: Remove uma curtida de um cartão.
 
 ### Frontend
+
 - **Cadastro e Login:**
   - Rota `/signin`: Tela de login.
   - Rota `/signup`: Tela de cadastro.
@@ -48,6 +53,7 @@ Este projeto é uma aplicação web completa composta por um backend desenvolvid
 ## Uso
 
 ### Backend
+
 1. Instale as dependências:
    ```bash
    npm install
@@ -59,6 +65,7 @@ Este projeto é uma aplicação web completa composta por um backend desenvolvid
 3. O backend estará disponível em [http://localhost:3000](http://localhost:3000).
 
 ### Frontend
+
 1. Instale as dependências:
    ```bash
    npm install
@@ -68,6 +75,3 @@ Este projeto é uma aplicação web completa composta por um backend desenvolvid
    npm run dev
    ```
 3. O frontend estará disponível em [http://localhost:3001](http://localhost:3001).
-
-### Nome Domínio
-https://around.ignorelist.com/
